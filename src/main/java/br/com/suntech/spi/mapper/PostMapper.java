@@ -10,5 +10,8 @@ import java.util.Map;
 public interface PostMapper {
 
     List<Post> list(Map<String, Object> parameters) throws Exception;
+    List<Post> listProcessed(Map<String, Object> parameters) throws Exception;
+    List<Post> listNotProcessed(Map<String, Object> parameters) throws Exception;
+    void saveProcessed(Map<String, Object> parameters) throws Exception;
 
 }

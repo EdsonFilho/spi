@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Getter @Setter
 public class Post implements Serializable {
 
+    private Long id_post;
     private Long original_id;
     private String content;
     private String link;
@@ -15,7 +17,7 @@ public class Post implements Serializable {
     private String author_name;
     private String author_avatar;
     private String author_link;
-    private Long created_original_date;
+    private Timestamp created_original_date;
 
     private String interaction_type;
     private String source;
@@ -26,13 +28,4 @@ public class Post implements Serializable {
     private String address;
     private String keywords;
 
-    public Post(){}
-
-    public Post(Long original_id, String content, String author_username, String author_name, Long created_original_date) {
-        this.original_id = original_id;
-        this.content = content;
-        this.author_username = author_username;
-        this.author_name = author_name;
-        this.created_original_date = created_original_date;
-    }
 }

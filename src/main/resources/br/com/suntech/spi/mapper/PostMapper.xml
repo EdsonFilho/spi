@@ -5,19 +5,76 @@
 
     <select id="list" parameterType="java.util.Map" statementType="CALLABLE" flushCache="true">
         {
-            #{result, jdbcType=OTHER, mode=OUT, resultMap=result, javaType=java.sql.ResultSet}
+            #{listResult, jdbcType=OTHER, mode=OUT, resultMap=listResult, javaType=java.sql.ResultSet}
             =
-            call f_valid_login_user(
-              #{username, jdbcType=VARCHAR, mode=IN},
-              #{password, jdbcType=VARCHAR, mode=IN}
+            call public.f_list_posts(
+                 #{offset, jdbcType=INTEGER, mode=IN}
             )
         }
     </select>
 
-    <resultMap type="br.com.suntech.spi.model.Post" id="result" >
-        <result property="id"           column="id" />
-        <result property="userName"     column="tx_username" />
-        <result property="status"       column="status_login" />
+    <resultMap type="br.com.suntech.spi.model.Post" id="listResult" >
+        <result property="id_post"           column="id_post" />
+        <result property="content"     		 column="content" />
+        <result property="original_id"       column="original_id" />
+        <result property="author_name"       column="author_name" />
+        <result property="author_username"   column="author_username" />
     </resultMap>
+
+
+    <select id="listProcessed" parameterType="java.util.Map" statementType="CALLABLE" flushCache="true">
+        {
+            #{listResultProcessed, jdbcType=OTHER, mode=OUT, resultMap=listResultProcessed, javaType=java.sql.ResultSet}
+            =
+            call public.f_list_posts_processed(
+              #{pid_post_source, jdbcType=INTEGER, mode=IN},
+              #{pmin_similarity, jdbcType=NUMERIC, mode=IN}
+              #{pmax_results,    jdbcType=INTEGER, mode=IN}
+            )
+        }
+    </select>
+
+    <resultMap type="br.com.suntech.spi.model.Post" id="listResultProcessed" >
+        <result property="id_post"           column="id_post" />
+        <result property="content"     column="content" />
+        <result property="original_id"       column="original_id" />
+        <result property="author_name"           column="author_name" />
+        <result property="author_username"     column="author_username" />
+        <result property="vl_similarity"       column="vl_similarity" />
+    </resultMap>
+
+
+    <select id="listNotProcessed" parameterType="java.util.Map" statementType="CALLABLE" flushCache="true">
+        {
+            #{listResultNotProcessed, jdbcType=OTHER, mode=OUT, resultMap=listResultNotProcessed, javaType=java.sql.ResultSet}
+            =
+            call public.f_list_posts_not_processed(
+              #{postId, jdbcType=INTEGER, mode=IN},
+              #{pageSize, jdbcType=INTEGER, mode=IN}
+            )
+        }
+    </select>
+
+    <resultMap type="br.com.suntech.spi.model.Post" id="listResultNotProcessed" >
+        <result property="id_post"     column="id_post" />
+        <result property="content"     column="content" />
+        <result property="status"      column="status_login" />
+    </resultMap>
+
+
+
+    <select id="saveProcessed" parameterType="java.util.Map" statementType="CALLABLE">
+        {
+            #{postId, jdbcType=INTEGER, mode=OUT, javaType=java.lang.Integer, }
+            =
+            call f_ins_post_processed(
+                #{pid_post,               jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
+                #{pid_post_associated,    jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
+                #{pvl_similarity,         jdbcType=NUMERIC,  mode=IN, javaType=java.lang.Double}
+            )
+        }
+    </select>
+
+
 
 </mapper>

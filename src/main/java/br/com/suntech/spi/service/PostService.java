@@ -23,7 +23,8 @@ public class PostService {
         parameters.put("offset",offset);
         List<Post> list = null;
         try {
-            list = database.list(parameters);
+            database.list(parameters);
+            list = (List<Post>) parameters.get("listResult");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,7 +33,7 @@ public class PostService {
 
     public PostResult process(PostRequest request) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("originalId",request.getOriginalId());
+        parameters.put("postId",request.getPostId());
         parameters.put("pageSize",request.getPageSize());
 
         Cosine instance = new Cosine();
@@ -42,14 +43,18 @@ public class PostService {
 
         List<Post> posts = null;
         try {
-            posts = database.list(parameters);
+            database.listNotProcessed(parameters);
+            posts = (List<Post>) parameters.get("listResultNotProcessed");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         posts.forEach(post -> {
-            if (instance.similarity(request.getContent(), post.getContent()) >= request.getSimilarityLevel()){
-                result.getPost().add(post);
+//            if (instance.similarity(request.getContent(), post.getContent()) >= (request.getSimilarityLevel() / 100)){
+            double similarity = instance.similarity(request.getContent(), post.getContent());
+            if (similarity >= 0.25 && similarity < 1){
+                System.out.println(similarity);
+                result.add(post);
             }
         });
 
