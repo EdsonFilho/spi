@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SPI - Similar Post Identification</title>
+
+    <link th:href="@{/resources/bootstrap/css/bootstrap.min.css}" href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/resources/style.css}" href="style.css" rel="stylesheet">
+
+
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">SPI - Similar Post Identification</a>
+
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div id="main" class="container"></div>
+
+    <footer class="py-5 bg-dark position-absolute w-100">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; 2018</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script th:href="@{/resources/static/jquery/jquery.min.js}" src="resources/jquery/jquery.min.js"></script>
+    <script th:href="@{/resources/static/bootstrap/js/bootstrap.min.js}" src="resources/bootstrap/js/bootstrap.min.js"></script>
+    <script th:href="@{/resources/static/handlebars/handlebars-v4.0.12.js}" src="resources/handlebars/handlebars-v4.0.12.js"></script>
+    <script th:href="@{/resources/static/script.js}" src="resources/script.js"></script>
+    <script>
+        $(document).ready(function() {
+            JSController.loadPostList(6);
+        });
+    </script>
+
+    <script id="postTemplate" type="text/x-handlebars-template">
+        <h1 class="my-4">{{title}}</h1>
+        <div class="row justify-content-md-center">
+            {{#each result}}
+            <div class="col-5 border primary mr-md-2 mb-md-2 p-md-2" id="id_{{original_id}}" style="cursor:pointer" onclick="JSController.onClickPost({{this}})">
+                <div class="media">
+                    <div class="media-header">
+                        <img class="mr-3 rounded-circle" src="http://placehold.it/64x64" alt="Generic placeholder image">
+                    </div>
+                    <div class="media-body">
+                        <h5><b>{{author_name}}</b></h5>
+                        <h5 class="mt-0">{{author_username}} <small>{{date}}</small></h5>
+                        {{content}}
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </script>
+
+    <script id="resultTemplate" type="text/x-handlebars-template">
+        <h1 class="my-4">{{title}}</h1>
+        <div class="row justify-content-md-center">
+            {{#each result}}
+            <div class="col-5 border primary mr-md-2 mb-md-2 p-md-2" id="result_{{original_id}}" style="cursor:pointer" onclick="JSController.onClickPost({{this.original_id}})">
+                <div class="media">
+                    <div class="media-header">
+                        <img class="mr-3 rounded-circle" src="http://placehold.it/64x64" alt="Generic placeholder image">
+                    </div>
+                    <div class="media-body">
+                        <h5><b>{{author_name}}</b></h5>
+                        <h5 class="mt-0">{{author_username}} <small>{{date}}</small></h5>
+                        {{content}}
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </script>
+
+</body>
+
+</html>
