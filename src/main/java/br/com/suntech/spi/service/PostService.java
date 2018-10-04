@@ -1,9 +1,11 @@
 package br.com.suntech.spi.service;
 
+import br.com.suntech.spi.database.PostgreSQL;
 import br.com.suntech.spi.model.Post;
 import br.com.suntech.spi.model.PostRequest;
 import br.com.suntech.spi.model.PostResult;
 import info.debatty.java.stringsimilarity.Cosine;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,6 +14,9 @@ import java.util.List;
 
 @Service
 public class PostService {
+
+    @Autowired
+    PostgreSQL database;
 
     private static final List<Post> DADOS = new ArrayList<>(Arrays.asList(
         new Post(1L, "Smartphone Samsung Galaxy On 7 leage eath pass nive coming sort top car", "@leochucre", "Leonard Moraes", 100000L),
@@ -23,10 +28,7 @@ public class PostService {
     ));
 
     public List<Post> list(Integer offset) {
-        List<Post> list = new ArrayList<>();
-        for (int i = 0; i < offset; i++) {
-            list.add(DADOS.get(i));
-        }
+        List<Post> list = database.list(offset);
         return list;
     }
 
