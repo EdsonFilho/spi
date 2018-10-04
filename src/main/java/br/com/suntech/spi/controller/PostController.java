@@ -29,9 +29,11 @@ public class PostController {
     }
 
     @PostMapping("/process")
-    public PostResult get(@RequestBody PostRequest request){
+    public PostResult process(@RequestBody PostRequest request){
         PostResult process = postService.process(request);
         return process;
     }
+
+
 
 }

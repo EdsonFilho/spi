@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="br.com.suntech.spi.mapper.PostMapper">
+
+    <select id="list" parameterType="java.util.Map" statementType="CALLABLE" flushCache="true">
+        {
+            #{result, jdbcType=OTHER, mode=OUT, resultMap=result, javaType=java.sql.ResultSet}
+            =
+            call f_valid_login_user(
+              #{username, jdbcType=VARCHAR, mode=IN},
+              #{password, jdbcType=VARCHAR, mode=IN}
+            )
+        }
+    </select>
+
+    <resultMap type="br.com.suntech.spi.model.Post" id="result" >
+        <result property="id"           column="id" />
+        <result property="userName"     column="tx_username" />
+        <result property="status"       column="status_login" />
+    </resultMap>
+
+</mapper>
