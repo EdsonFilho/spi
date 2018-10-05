@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Getter @Setter
 public class PostRequest implements Serializable {
 
-    private Integer postId;
+    private Long postId;
     private String content;
     private Integer similarityLevel;
     private Integer pageSize;

@@ -65,12 +65,12 @@
 
     <select id="saveProcessed" parameterType="java.util.Map" statementType="CALLABLE">
         {
-            #{postId, jdbcType=INTEGER, mode=OUT, javaType=java.lang.Integer, }
+            #{result, jdbcType=INTEGER, mode=OUT, javaType=java.lang.Integer, }
             =
             call f_ins_post_processed(
-                #{pid_post,               jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
-                #{pid_post_associated,    jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
-                #{pvl_similarity,         jdbcType=NUMERIC,  mode=IN, javaType=java.lang.Double}
+                #{postId,         jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
+                #{relatedPostId,  jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
+                #{similarity,     jdbcType=NUMERIC,  mode=IN, javaType=java.lang.Double}
             )
         }
     </select>
