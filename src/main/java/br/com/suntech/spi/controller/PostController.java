@@ -5,7 +5,6 @@ import br.com.suntech.spi.model.PostRequest;
 import br.com.suntech.spi.model.PostResult;
 import br.com.suntech.spi.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 

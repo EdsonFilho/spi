@@ -23,3 +23,20 @@ body {
 footer {
   bottom: 0;
 }
+
+.media-body {
+  max-width: 80%;
+}
+
+.media .brand,
+.media > .img {
+  bottom: 10px;
+  position: absolute;
+  right: 10px;
+
+}
+
+.media .img {
+  width: 20px;
+}
+

@@ -24,12 +24,12 @@
 
     <select id="listProcessed" parameterType="java.util.Map" statementType="CALLABLE" flushCache="true">
         {
-            #{listResultProcessed, jdbcType=OTHER, mode=OUT, resultMap=listResultProcessed, javaType=java.sql.ResultSet}
+            #{result, jdbcType=OTHER, mode=OUT, resultMap=listResultProcessed, javaType=java.sql.ResultSet}
             =
             call public.f_list_posts_processed(
-              #{pid_post_source, jdbcType=INTEGER, mode=IN},
-              #{pmin_similarity, jdbcType=NUMERIC, mode=IN}
-              #{pmax_results,    jdbcType=INTEGER, mode=IN}
+              #{postId, jdbcType=INTEGER, mode=IN},
+              #{similarity, jdbcType=NUMERIC, mode=IN},
+              #{offset,    jdbcType=INTEGER, mode=IN}
             )
         }
     </select>
@@ -68,8 +68,8 @@
             #{result, jdbcType=INTEGER, mode=OUT, javaType=java.lang.Integer, }
             =
             call f_ins_post_processed(
-                #{relatedPostId,         jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
                 #{postId,  jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
+                #{relatedPostId,         jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
                 #{similarity,     jdbcType=NUMERIC,  mode=IN, javaType=java.lang.Double}
             )
         }

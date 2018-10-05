@@ -36,13 +36,13 @@ public class PostService {
 
     public List<Post> listProcessed(Integer postId, Double similarity, Integer offset) {
         HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("pid_post_source",postId);
-        parameters.put("pmin_similarity",similarity);
-        parameters.put("pmax_results",offset);
+        parameters.put("postId",postId);
+        parameters.put("similarity",similarity);
+        parameters.put("offset",offset);
         List<Post> list = null;
         try {
-            database.list(parameters);
-            list = (List<Post>) parameters.get("listResult");
+            database.listProcessed(parameters);
+            list = (List<Post>) parameters.get("result");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,19 +68,31 @@ public class PostService {
                     doProcessSimilarityByCosine(result, posts); break;
 //                case LEVENSHTEIN:
 //                    doProcessSimilarityByLevenshtein(result, posts); break;
-//                case jaro_winkler:
+//                case JARO_WINKLER:
 //                    doProcessSimilarityByJaro-Winkler(result, posts); break;
-                default:
-                    break;
+                default: break;
             }
-//PosParserData
+
+            //PosParserData
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        List<Post> listProcessedSorted = getListProcessedSorted(request);
+        result.setPost(listProcessedSorted);
+
         return result;
+    }
+
+    private List<Post> getListProcessedSorted(PostRequest request) {
+        Integer postId = request.getPostId();
+        Integer similarityLevel = request.getSimilarityLevel();
+        double similarityMin = similarityLevel > 1 ? similarityLevel / 100.0 : similarityLevel;
+        int maxValue = Integer.MAX_VALUE;
+        List<Post> posts = listProcessed(postId, similarityMin, maxValue);
+        return posts;
     }
 
     private void saveProcessPostData(Integer postId, Integer relatedPostId, Double similarity){
@@ -90,6 +102,7 @@ public class PostService {
         parameters.put("similarity",similarity);
 
         try {
+//            System.out.println(postId + " + " + relatedPostId + " = " + similarity);
             database.saveProcessed(parameters);
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,25 +112,11 @@ public class PostService {
     private void doProcessSimilarityByCosine(PostResult result, List<Post> posts){
         Cosine instance = new Cosine();
         PostRequest request = result.getRequest();
+
         posts.forEach(post -> {
             double similarity = instance.similarity(request.getContent(), post.getContent());
-            Integer similarityLevel = request.getSimilarityLevel();
-
-            DecimalFormat df = new DecimalFormat("0.##");
-            post.setSimilarity(df.format(similarity*100)+"%");
-
-            if (similarityRule(similarityLevel, similarity)){
-                result.add(post);
-                saveProcessPostData(post.getId_post(), request.getPostId(), similarity);
-                System.out.println(similarity + "---" + post.getId_post() + "-->" + post.getContent());
-            }
+            saveProcessPostData(request.getPostId(), post.getId_post(), similarity);
         });
-    }
 
-    private Boolean similarityRule(double similarityLevel, double similarity){
-        double similarityMin = similarityLevel > 1 ? similarityLevel / 100.0 : similarityLevel;
-        double similarityMax = 1;
-        return similarity >= similarityMin && similarity < similarityMax;
     }
-
 }

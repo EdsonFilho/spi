@@ -13,20 +13,18 @@
     <link th:href="@{/resources/bootstrap/css/bootstrap.min.css}" href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/resources/style.css}" href="style.css" rel="stylesheet">
 
-
-
 </head>
 
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">SPI - Similar Post Identification</a>
+            <a class="navbar-brand" href="/">SPI - Similar Post Identification</a>
 
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" href="/">Home</a>
                     </li>
                 </ul>
             </div>
@@ -36,11 +34,11 @@
 
     <div id="main" class="container"></div>
 
-    <footer class="py-5 bg-dark position-absolute w-100">
+<!--    <footer class="py-5 bg-dark position-absolute w-100">
         <div class="container">
             <p class="m-0 text-center text-white">Copyright &copy; 2018</p>
         </div>
-    </footer>
+    </footer>-->
 
     <!-- Bootstrap core JavaScript -->
     <script th:href="@{/resources/static/jquery/jquery.min.js}" src="resources/jquery/jquery.min.js"></script>
@@ -54,19 +52,33 @@
     </script>
 
     <script id="postTemplate" type="text/x-handlebars-template">
-        <h1 class="my-4">{{title}}</h1>
+        <div style="display:block; margin-top:20px;">
+            <h1 style="display:inline;" class="my-4">{{title}}</h1>
+
+            <div style="display:inline;float:right;" class="slidecontainer">
+                Similarity level:
+                <input type="range" min="0" max="100" value="70" class="slider" id="slider">
+                <span id="similarityLevel" style="font-weight:bold;color:black">70</span><span style="font-weight:bold;color:black">%</span>
+            </div>
+        </div>
         <div class="row justify-content-md-center">
             {{#each result}}
-            <div class="col-5 border primary mr-md-2 mb-md-2 p-md-2" id="id_{{id_post}}" style="cursor:pointer" onclick="JSController.onClickPost({{id_post}})">
+            <div class="col-5 border primary mr-md-2 mb-md-2 p-md-2" id="id_{{id_post}}" style="cursor:pointer;background-color:#1da1f23b;" onclick="JSController.onClickPost({{id_post}})">
                 <div class="media">
                     <div class="media-header">
                         <img class="mr-3 rounded-circle" src="{{author_avatar}}" alt="Generic placeholder image">
                     </div>
-                    <div class="media-body">
-                        <h5><b>{{author_name}}</b></h5>
-                        <h5 class="mt-0">{{author_username}} <small>{{date}}</small></h5>
-                        {{content}}
+                    <div class="media-body position-relative">
+                        <div style="display:block;">
+                            <h5><b>{{author_name}}</b></h5>
+                        </div>
+                        <div style="display:block;">
+                            <h5 style="display:inline" class="mt-0">@{{author_username}}</h5>
+                            <div style="display:inline;float: right;">{{postDate}}</div>
+                        </div>
+                        <div style="display:block;">{{content}}</div>
                     </div>
+                    <img class="img" src="resources/twitter.png"/>
                 </div>
             </div>
             {{/each}}
@@ -77,20 +89,50 @@
         <h1 class="my-4">{{title}}</h1>
         <div class="row justify-content-md-center">
             {{#each result}}
-            <div class="col-5 border primary mr-md-2 mb-md-2 p-md-2" id="result_{{original_id}}" style="cursor:pointer" onclick="JSController.onClickPost({{this.original_id}})">
+                <div class="col-5 border primary mr-md-2 mb-md-2 p-md-2" id="result_{{original_id}}" style="background-color:#e6e6fa;">
+                    <div class="media">
+                        <div class="media-header">
+                            <img class="mr-3 rounded-circle" src="{{author_avatar}}" alt="Generic placeholder image">
+                        </div>
+                        <div class="media-body position-relative">
+                            <div style="display:block;">
+                                <h5 style="display:inline"><b>{{author_name}}</b></h5>
+                                <div style="display:inline; color:#1da1f2;float: right;"><b><i>{{similarity}}</i></b></div>
+                            </div>
+                            <div style="display:block;">
+                                <h5 style="display:inline" class="mt-0">@{{author_username}}</h5>
+                                <div style="display:inline;float: right;">{{postDate}}</div>
+                            </div>
+                            <div style="display:block;">{{content}}</div>
+                        </div>
+                            <a href="{{link}}" target="_blank" class="brand" ><img class="img" src="resources/twitter.png"/></a>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </script>
+
+    <script id="loadingTemplate" type="text/x-handlebars-template">
+        <h1 class="my-4">{{title}}</h1>
+        <div class="row justify-content-md-center">
+            <div class="col-5 border primary mr-md-2 mb-md-2 p-md-2" id="loading_{{request.id_post}}" style="cursor:pointer;background-color:#1da1f23b;">
                 <div class="media">
                     <div class="media-header">
-                        <img class="mr-3 rounded-circle" src="{{author_avatar}}" alt="Generic placeholder image">
+                        <img class="mr-3 rounded-circle" src="{{request.author_avatar}}" alt="Generic placeholder image">
                     </div>
                     <div class="media-body">
-                        <h5 style="display:inline"><b>{{author_name}}</b></h5>
-                        <div style="display:inline; color:#1da1f2;"><b><i>{{similarity}}</i></b></div>
-                        <h5 class="mt-0">{{author_username}} <small>{{date}}</small></h5>
-                        {{content}}
+                        <div style="display:block;">
+                            <h5><b>{{request.author_name}}</b></h5>
+                        </div>
+                        <div style="display:block;">
+                            <h5 style="display:inline" class="mt-0">@{{request.author_username}}</h5>
+                            <div style="display:inline;float: right;">{{request.postDate}}</div>
+                        </div>
+                        <div style="display:block;">{{request.content}}</div>
                     </div>
                 </div>
             </div>
-            {{/each}}
+            <img src="resources/loading.gif" alt="Generic placeholder image">
         </div>
     </script>
 
