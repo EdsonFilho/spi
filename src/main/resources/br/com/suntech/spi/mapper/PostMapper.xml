@@ -50,7 +50,7 @@
             =
             call public.f_list_posts_not_processed(
               #{postId, jdbcType=INTEGER, mode=IN},
-              #{pageSize, jdbcType=INTEGER, mode=IN}
+              #{maxReg, jdbcType=INTEGER, mode=IN}
             )
         }
     </select>
@@ -68,8 +68,8 @@
             #{result, jdbcType=INTEGER, mode=OUT, javaType=java.lang.Integer, }
             =
             call f_ins_post_processed(
-                #{postId,         jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
-                #{relatedPostId,  jdbcType=INTEGER, mode=IN, javaType=java.lang.Integer},
+                #{postId,         jdbcType=BIGINT, mode=IN, javaType=java.lang.Long},
+                #{relatedPostId,  jdbcType=BIGINT, mode=IN, javaType=java.lang.Long},
                 #{similarity,     jdbcType=NUMERIC,  mode=IN, javaType=java.lang.Double}
             )
         }

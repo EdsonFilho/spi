@@ -12,5 +12,6 @@ public class PostRequest implements Serializable {
     private String content;
     private Integer similarityLevel;
     private Integer pageSize;
+    private Integer strategy;
 
 }

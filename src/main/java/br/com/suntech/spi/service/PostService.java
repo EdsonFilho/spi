@@ -15,6 +15,8 @@ import java.util.Map;
 @Service
 public class PostService {
 
+    public static final Integer COSINE = 1;
+
     @Autowired
     PostMapper database;
 
@@ -33,8 +35,8 @@ public class PostService {
 
     public PostResult process(PostRequest request) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("postId",request.getPostId());
-        parameters.put("pageSize",request.getPageSize());
+        parameters.put("postId", request.getPostId().intValue());
+        parameters.put("maxReg",Integer.MAX_VALUE);
 
         PostResult result = new PostResult();
         result.setRequest(request);
@@ -42,7 +44,22 @@ public class PostService {
         try {
             database.listNotProcessed(parameters);
             List<Post> posts = (List<Post>) parameters.get("listResultNotProcessed");
-            doProcessSimilarityByCosine(result, posts);
+
+            // Pre parserData();
+
+            switch (request.getStrategy()){
+                case 1:
+                    doProcessSimilarityByCosine(result, posts); break;
+//                case LEVENSHTEIN:
+//                    doProcessSimilarityByLevenshtein(result, posts); break;
+//                case jaro_winkler:
+//                    doProcessSimilarityByJaro-Winkler(result, posts); break;
+                default:
+                    break;
+            }
+//PosParserData
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

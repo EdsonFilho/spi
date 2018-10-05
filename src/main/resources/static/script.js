@@ -1,5 +1,9 @@
 var JSController = JSController || {};
 
+var strategy = {
+    'COSINE' : 1
+}
+
 JSController = {
 
     selectionBox: {},
@@ -49,7 +53,7 @@ JSController = {
 
     setResult: function (data,container) {
         var template = JSController.getTemplate('result');
-        var html = template({result: data, title: 'Result'});
+        var html = template({result: data.post, request:data.request, title: 'Result'});
         $("#"+container).html(html);
     },
 
@@ -60,14 +64,16 @@ JSController = {
 
     onClickPost:function(index){//
         var item = JSController.selectionBox[index];
+        console.log(item)
         var postRequest = {
             'content' : item.content,
             'postId' : item.id_post,
-            'similarityLevel' : 50,
-            'pageSize' : 200000
+            'similarityLevel' : 70,
+            'pageSize' : 10,
+            'strategy' : strategy.COSINE
         };
 
         console.log(postRequest);
-        JSController.submitAjax("/process", postRequest, "main", JSController.setContent);
+        JSController.submitAjax("/process", postRequest, "main", JSController.setResult);
     }
 }
