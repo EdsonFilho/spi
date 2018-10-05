@@ -34,6 +34,21 @@ public class PostService {
         return list;
     }
 
+    public List<Post> listProcessed(Integer postId, Double similarity, Integer offset) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("pid_post_source",postId);
+        parameters.put("pmin_similarity",similarity);
+        parameters.put("pmax_results",offset);
+        List<Post> list = null;
+        try {
+            database.list(parameters);
+            list = (List<Post>) parameters.get("listResult");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public PostResult process(PostRequest request) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("postId", request.getPostId().intValue());
@@ -68,7 +83,7 @@ public class PostService {
         return result;
     }
 
-    private void saveProcessPostData(Long postId, Long relatedPostId, Double similarity){
+    private void saveProcessPostData(Integer postId, Integer relatedPostId, Double similarity){
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("postId", postId);
         parameters.put("relatedPostId",relatedPostId);

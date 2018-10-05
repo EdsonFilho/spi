@@ -9,8 +9,8 @@ import java.sql.Timestamp;
 @Getter @Setter
 public class Post implements Serializable {
 
-    private Long id_post;
-    private Long original_id;
+    private Integer id_post;
+    private String original_id;
     private String content;
     private String link;
     private String author_username;
