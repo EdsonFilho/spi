@@ -28,4 +28,6 @@ public class Post implements Serializable {
     private String address;
     private String keywords;
 
+    private String similarity;
+    private String postDate;
 }

@@ -8,6 +8,7 @@ import info.debatty.java.stringsimilarity.Cosine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +87,9 @@ public class PostService {
         posts.forEach(post -> {
             double similarity = instance.similarity(request.getContent(), post.getContent());
             Integer similarityLevel = request.getSimilarityLevel();
+
+            DecimalFormat df = new DecimalFormat("0.##");
+            post.setSimilarity(df.format(similarity*100)+"%");
 
             if (similarityRule(similarityLevel, similarity)){
                 result.add(post);

@@ -60,7 +60,7 @@
             <div class="col-5 border primary mr-md-2 mb-md-2 p-md-2" id="id_{{id_post}}" style="cursor:pointer" onclick="JSController.onClickPost({{id_post}})">
                 <div class="media">
                     <div class="media-header">
-                        <img class="mr-3 rounded-circle" src="http://placehold.it/64x64" alt="Generic placeholder image">
+                        <img class="mr-3 rounded-circle" src="{{author_avatar}}" alt="Generic placeholder image">
                     </div>
                     <div class="media-body">
                         <h5><b>{{author_name}}</b></h5>
@@ -80,10 +80,11 @@
             <div class="col-5 border primary mr-md-2 mb-md-2 p-md-2" id="result_{{original_id}}" style="cursor:pointer" onclick="JSController.onClickPost({{this.original_id}})">
                 <div class="media">
                     <div class="media-header">
-                        <img class="mr-3 rounded-circle" src="http://placehold.it/64x64" alt="Generic placeholder image">
+                        <img class="mr-3 rounded-circle" src="{{author_avatar}}" alt="Generic placeholder image">
                     </div>
                     <div class="media-body">
-                        <h5><b>{{author_name}}</b></h5>
+                        <h5 style="display:inline"><b>{{author_name}}</b></h5>
+                        <div style="display:inline; color:#1da1f2;"><b><i>{{similarity}}</i></b></div>
                         <h5 class="mt-0">{{author_username}} <small>{{date}}</small></h5>
                         {{content}}
                     </div>
